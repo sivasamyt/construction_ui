@@ -1,0 +1,11 @@
+
+.landing_page{
+    height: 100vh;
+    .home_page{
+        background-image: url('../allImages/homePage.jpg');
+        height: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+}
