@@ -3,20 +3,22 @@ import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
-import './styles.scss';
+import "./styles.scss";
 import SignupButton from "../../components/signUPButton";
-import { signupApi } from "../../api/allApi";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-
-
+import { otpApi, signupApi } from "../../api/allApi";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type Props = {};
 
 export const SignUpPage: React.FC = (props: Props) => {
   const [submit, setSubmit] = useState(false);
   const [loading, setloading] = useState(false);
+  const [otpEnter, setOtpEnter] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [otpNumber, setOtpNumber] = useState("");
+  const [emailId, setEmailId]=useState("");
+
   // const [message, setMessage] = useState("");
 
   const [pwd, setPwd] = useState("");
@@ -35,22 +37,40 @@ export const SignUpPage: React.FC = (props: Props) => {
     setloading(true);
   };
 
-  const showToastMessage = () => {
-    toast.error(message, {
-      position: toast.POSITION.TOP_LEFT
+  const verifyButton = () => {
+    setIsDisabled(true);
+  };
+
+  const showToastMessage = (showMessage: string) => {
+    toast.error(showMessage, {
+      position: toast.POSITION.TOP_LEFT,
     });
   };
-  console.log(message);
 
   useEffect(() => {
-    cpwd && cpwd === pwd ? setSubmit(true) : setSubmit(false);
-  }, [cpwd, pwd]);
+    otpEnter && cpwd && cpwd === pwd ? setSubmit(true) : setSubmit(false);
+  }, [cpwd, pwd, otpEnter]);
+
+  const otpVerify = async () => {
+if(emailId !== ""){
+  setOtpEnter(true);
+  setOtpNumber(await otpApi());
+}else{
+  showToastMessage("EmailID Should Not be Empty");
+}
+  };
 
   const onSubmit = async (data: any) => {
-    let result = await signupApi(data);
-    result.message == 'success' ? nav('/',{state:{message:'SignUp successfully'}}) : nav('/signup', { state: { message: 'Signup Failure' } });
-    message && showToastMessage();
-  }
+    if (otpNumber.toString() === data["otpNumber"]) {
+      let result = await signupApi(data);
+      result.message === "success"
+        ? nav("/", { state: { message: "SignUp successfully" } })
+        : nav("/signup", { state: { message: result.message } });
+      message && showToastMessage(message);
+    } else {
+      showToastMessage("OTP Not valid");
+    }
+  };
 
   return (
     <div className="signup_page">
@@ -62,12 +82,9 @@ export const SignUpPage: React.FC = (props: Props) => {
             required
             size="small"
             label="Username"
-            onFocus={load}
             className="form-control"
             type="text"
-            {...register("Username", {
-              onBlur: unLoad,
-            })}
+            {...register("Username")}
           />
         </div>
         <div className="form-group">
@@ -75,14 +92,20 @@ export const SignUpPage: React.FC = (props: Props) => {
             required
             size="small"
             label="Email Id"
-            onFocus={load}
+            onFocus={verifyButton}
             className="form-control"
             type="email"
-            {...register("Email", {
-              onBlur: unLoad,
-            })}
+            {...register("Email")}
+            onChange={(e)=>setEmailId(e.target.value)}
           />
         </div>
+        <button
+          disabled={isDisabled ? false : true}
+          type="button"
+          onClick={otpVerify}
+        >
+          verify
+        </button>
 
         <div className="form-group">
           <TextField
@@ -115,10 +138,24 @@ export const SignUpPage: React.FC = (props: Props) => {
             }}
           />
         </div>
+
+        {otpEnter && (
+          <div className="form-group">
+            <TextField
+              required
+              size="small"
+              label="Otp here"
+              className="form-control"
+              type="number"
+              {...register("otpNumber")}
+            />
+          </div>
+        )}
+
         <div className="signup_buttons">
           <SignupButton isDisabled={submit} loading={loading} type="submit" />
         </div>
       </form>
     </div>
-  )
-}
+  );
+};
