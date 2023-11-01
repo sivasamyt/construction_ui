@@ -17,7 +17,7 @@ export const SignUpPage: React.FC = (props: Props) => {
   const [otpEnter, setOtpEnter] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [otpNumber, setOtpNumber] = useState("");
-  const [emailId, setEmailId]=useState("");
+  const [emailId, setEmailId] = useState("");
 
   // const [message, setMessage] = useState("");
 
@@ -52,12 +52,12 @@ export const SignUpPage: React.FC = (props: Props) => {
   }, [cpwd, pwd, otpEnter]);
 
   const otpVerify = async () => {
-if(emailId !== ""){
-  setOtpEnter(true);
-  setOtpNumber(await otpApi());
-}else{
-  showToastMessage("EmailID Should Not be Empty");
-}
+    if (emailId !== "") {
+      setOtpEnter(true);
+      setOtpNumber(await otpApi());
+    } else {
+      showToastMessage("EmailID Should Not be Empty");
+    }
   };
 
   const onSubmit = async (data: any) => {
@@ -96,16 +96,17 @@ if(emailId !== ""){
             className="form-control"
             type="email"
             {...register("Email")}
-            onChange={(e)=>setEmailId(e.target.value)}
+            onChange={(e) => setEmailId(e.target.value)}
           />
+          {isDisabled &&
+            <button
+              type="button"
+              onClick={otpVerify}>verify</button>}
         </div>
-        <button
-          disabled={isDisabled ? false : true}
-          type="button"
-          onClick={otpVerify}
-        >
-          verify
-        </button>
+        {/* {isDisabled &&
+            <button
+              type="button"
+              onClick={otpVerify}>verify</button>} */}
 
         <div className="form-group">
           <TextField
