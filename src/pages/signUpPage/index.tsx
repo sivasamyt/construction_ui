@@ -31,7 +31,7 @@ export const SignUpPage: React.FC = (props: Props) => {
   const unLoad = () => {
     setloading(false);
   };
-  const message = location.state?.message;
+  let message = location.state?.message;
 
   const load = () => {
     setloading(true);
@@ -41,35 +41,39 @@ export const SignUpPage: React.FC = (props: Props) => {
     setIsDisabled(true);
   };
 
-  const showToastMessage = (showMessage: string) => {
-    toast.error(showMessage, {
-      position: toast.POSITION.TOP_LEFT,
-    });
+  const showToastMessage = (showMessage: string,type:string) => {
+    // const msgType={(type==="success")? ("toast.success":"toast.error");}
+    if(type==="success"){
+      toast.success(showMessage, {
+        position: toast.POSITION.TOP_LEFT,
+      });
+    }else{ 
+      toast.error(showMessage, {
+        position: toast.POSITION.TOP_LEFT,
+      });
+    }
   };
 
   useEffect(() => {
     otpEnter && cpwd && cpwd === pwd ? setSubmit(true) : setSubmit(false);
   }, [cpwd, pwd, otpEnter]);
 
-  const otpVerify = async () => {
+  const otpVerify = async (emailId:string) => {
     if (emailId !== "") {
       setOtpEnter(true);
-      setOtpNumber(await otpApi());
+      let result=await otpApi(emailId);
+      showToastMessage(result.message,"success");
     } else {
-      showToastMessage("EmailID Should Not be Empty");
+      showToastMessage("EmailID Should Not be Empty","error");
     }
   };
 
   const onSubmit = async (data: any) => {
-    if (otpNumber.toString() === data["otpNumber"]) {
-      let result = await signupApi(data);
-      result.message === "success"
-        ? nav("/", { state: { message: "SignUp successfully" } })
-        : nav("/signup", { state: { message: result.message } });
-      message && showToastMessage(message);
-    } else {
-      showToastMessage("OTP Not valid");
-    }
+    let result = await signupApi(data);
+    result.message === "success"
+      ? nav("/", { state: { message: "SignUp successfully" } })
+      : nav("/signup", { state: { message: result.message } });
+    message && showToastMessage(message,"");
   };
 
   return (
@@ -96,17 +100,17 @@ export const SignUpPage: React.FC = (props: Props) => {
             className="form-control"
             type="email"
             {...register("Email")}
-            onChange={(e) => setEmailId(e.target.value)}
+            onChange={(e)=>setEmailId(e.target.value)}
           />
           {isDisabled &&
             <button
               type="button"
-              onClick={otpVerify}>verify</button>}
+              onClick={()=>otpVerify(emailId)}>verify</button>}
         </div>
         {/* {isDisabled &&
             <button
               type="button"
-              onClick={otpVerify}>verify</button>} */}
+              onClick={()=>otpVerify(emailId)}>verify</button>} */}
 
         <div className="form-group">
           <TextField

@@ -27,9 +27,9 @@ export const signupApi = async (data: any) => {
   }
 };
 
-export const otpApi = async () => {
+export const otpApi = async (emailId:string) => {
   try {
-    const result = await Axios.get(`${api}/otpMail`);
+    const result = await Axios.post(`${api}/otpMail`,{email:emailId});
     console.log(result.data);
     return result.data;
   } catch (error) {
