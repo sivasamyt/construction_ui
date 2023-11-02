@@ -20,7 +20,10 @@ export const signupApi = async (data: any) => {
       username: data.Username,
       password: data.Password,
       email: data.Email,
+      otpNumber: data.otpNumber,
     });
+    console.log(result);
+    
     return result.data;
   } catch (error) {
     return "connection failed " + error;

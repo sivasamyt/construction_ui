@@ -27,13 +27,10 @@ export const LoginPage: React.FC = (props: Props) => {
 
     const onSubmit = async (data: any) => {
         const result = await loginApi(data);
-        console.log('result', result);
-
         if (result.token) {
             const name=result.user.name;
-            console.log(name);
             localStorage.setItem('token', result.token);
-            nav('/', { state: { message: `${name} Login successfully` } })
+            nav('/', { state: { message: `Welcome ${name}.` } })
         } else {
             nav('/login', { state: { message: 'Login Failed' } });
             showToastMessage();

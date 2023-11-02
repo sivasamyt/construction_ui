@@ -18,7 +18,7 @@ const LandingPage: React.FC = (props: Props) => {
 
     const showToastMessage = () => {
         toast.success(message, {
-            position: toast.POSITION.TOP_LEFT
+            position: toast.POSITION.TOP_CENTER
         });
     };
 

@@ -41,13 +41,13 @@ export const SignUpPage: React.FC = (props: Props) => {
     setIsDisabled(true);
   };
 
-  const showToastMessage = (showMessage: string,type:string) => {
+  const showToastMessage = (showMessage: string, type: string) => {
     // const msgType={(type==="success")? ("toast.success":"toast.error");}
-    if(type==="success"){
+    if (type === "success") {
       toast.success(showMessage, {
         position: toast.POSITION.TOP_LEFT,
       });
-    }else{ 
+    } else {
       toast.error(showMessage, {
         position: toast.POSITION.TOP_LEFT,
       });
@@ -58,13 +58,13 @@ export const SignUpPage: React.FC = (props: Props) => {
     otpEnter && cpwd && cpwd === pwd ? setSubmit(true) : setSubmit(false);
   }, [cpwd, pwd, otpEnter]);
 
-  const otpVerify = async (emailId:string) => {
+  const otpVerify = async (emailId: string) => {
     if (emailId !== "") {
       setOtpEnter(true);
-      let result=await otpApi(emailId);
-      showToastMessage(result.message,"success");
+      let result = await otpApi(emailId);
+      showToastMessage(result.message, "success");
     } else {
-      showToastMessage("EmailID Should Not be Empty","error");
+      showToastMessage("EmailID Should Not be Empty", "error");
     }
   };
 
@@ -73,7 +73,7 @@ export const SignUpPage: React.FC = (props: Props) => {
     result.message === "success"
       ? nav("/", { state: { message: "SignUp successfully" } })
       : nav("/signup", { state: { message: result.message } });
-    message && showToastMessage(message,"");
+    message && showToastMessage(message, "");
   };
 
   return (
@@ -100,12 +100,12 @@ export const SignUpPage: React.FC = (props: Props) => {
             className="form-control"
             type="email"
             {...register("Email")}
-            onChange={(e)=>setEmailId(e.target.value)}
+            onChange={(e) => setEmailId(e.target.value)}
           />
           {isDisabled &&
             <button
               type="button"
-              onClick={()=>otpVerify(emailId)}>verify</button>}
+              onClick={() => otpVerify(emailId)}>verify</button>}
         </div>
         {/* {isDisabled &&
             <button
