@@ -22,9 +22,9 @@ const LandingPage: React.FC = (props: Props) => {
   useEffect(() => {
     // setMessage(location.state?.message);
     let message = location.state?.message;
-    let fn = location.state?.fn;
+    // let fn = location.state?.fn;
 
-    console.log('messagemessage',fn);
+    // console.log('messagemessage',fn);
     
     message !== "" && showToastMessage(message);
     return () => {
