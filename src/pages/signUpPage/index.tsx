@@ -18,6 +18,7 @@ export const SignUpPage: React.FC = (props: Props) => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [otpNumber, setOtpNumber] = useState("");
   const [emailId, setEmailId] = useState("");
+  const [message, setMessage] = useState("")
 
   // const [message, setMessage] = useState("");
 
@@ -31,7 +32,7 @@ export const SignUpPage: React.FC = (props: Props) => {
   const unLoad = () => {
     setloading(false);
   };
-  let message = location.state?.message;
+  setMessage(location.state?.message);
 
   const load = () => {
     setloading(true);
@@ -69,11 +70,14 @@ export const SignUpPage: React.FC = (props: Props) => {
   };
 
   const onSubmit = async (data: any) => {
-    let result = await signupApi(data);
-    result.message === "success"
-      ? nav("/", { state: { message: "SignUp successfully" } })
-      : nav("/signup", { state: { message: result.message } });
-    message && showToastMessage(message, "");
+    // let result = await signupApi(data);
+    // if(result.message === "success"){
+      // showToastMessage("SARan", "");
+      nav("/", { state: { message: `Welcome ${data.Username}` , fn: setMessage} })
+    // }else {
+    //   showToastMessage(result.message, "error");
+    // }
+    
   };
 
   return (

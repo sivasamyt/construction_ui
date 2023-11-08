@@ -1,7 +1,16 @@
 .header{
+    height: 35px;
     background-color: #f2fdff;
     display: flex;
-    flex-direction: row-reverse;
-    gap: 10px;
-    
+    // 
+    justify-content: space-between;
+    // gap: 10px;
+    .project{
+        // display: flex;
+        
+    }
+    .buttonsGroup{
+        display: flex;
+        gap: 10px;
+    }
 }

@@ -42,6 +42,7 @@ export const LoginPage: React.FC = (props: Props) => {
 
     return (
         <div className="signup_page">
+            <button onClick={()=>nav('/')}>home</button>
             <ToastContainer />
             <h1>User Login</h1>
             <form className="signup_form" onSubmit={handleSubmit(onSubmit)}>
